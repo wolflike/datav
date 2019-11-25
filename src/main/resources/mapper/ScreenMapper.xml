@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.cad.mapper.ScreenDao">
+    <resultMap id="screen" type="com.bupt.cad.entity.Screen">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="userId" column="userId" />
+        <result property="config" column="config"
+        typeHandler="com.bupt.cad.utils.JsonTypeHandler" />
+        <result property="createTimestamp" column="createTimestamp" />
+        <result property="updateTimestamp" column="updateTimestamp" />
+        <collection property="coms" ofType="com.bupt.cad.entity.Com" column="screenId">
+            <id property="id" column="c_id"/>
+            <result property="name" column="c_name"/>
+            <result property="screenId" column="screenId"/>
+            <result property="dataSourceId" column="dataSourceId"/>
+            <result property="config" column="c_config" typeHandler="com.bupt.cad.utils.JsonTypeHandler"/>
+            <result property="createTimestamp" column="createTimestamp" />
+            <result property="updateTimestamp" column="updateTimestamp" />
+        </collection>
+    </resultMap>
+    <select id="getAllScreenNum" resultType="int" >
+        select count(*) from Screen;
+    </select>
+    <insert id="addScreen" parameterType="com.bupt.cad.entity.Screen" useGeneratedKeys="true" keyProperty="id">
+        insert Screen(name,userId,config) values(#{name},#{userId},
+        #{config,typeHandler=com.bupt.cad.utils.JsonTypeHandler});
+    </insert>
+    <select id="getScreen" parameterType="int" resultMap="screen">
+        select
+         s.*,
+         c.id as c_id,
+         c.name as c_name,
+         c.screenId,
+         c.dataSourceId,
+         c.config as c_config,
+         c.createTimestamp,
+         c.updateTimestamp
+         from Screen s
+         left join Com c on c.screenId = s.id
+         where s.id=#{screenId}
+    </select>
+    <update id="updateScreen" parameterType="com.bupt.cad.entity.Screen">
+        update Screen set config=#{config,typeHandler=com.bupt.cad.utils.JsonTypeHandler} where id=#{screenId};
+    </update>
+    <select id="getAllScreen" parameterType="int" resultMap="screen">
+         select
+         s.*,
+         c.id as c_id,
+         c.name as c_name,
+         c.screenId,
+         c.dataSourceId,
+         c.config as c_config,
+         c.createTimestamp,
+         c.updateTimestamp
+         from Screen s
+         left join Com c on c.screenId = s.id
+         where userId=#{userId};
+    </select>
+    <delete id="deleteScreen" parameterType="int">
+        delete from Screen where id=#{screenId};
+    </delete>
+    <!--填写映射-->
+</mapper>

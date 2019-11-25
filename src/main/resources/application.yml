@@ -1,0 +1,30 @@
+server:
+  port: 8765
+spring:
+  datasource:
+    url: jdbc:mysql://10.108.211.130:3306/luo?useUnicode=true&useSSL=false&characterEncoding=UTF-8
+    username: root
+    password: mySQL#h@d00p
+    driver-class-name: com.mysql.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 3MB
+  mvc:
+    throw-exception-if-no-handler-found: true
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+#    static-path-pattern: /static/**
+#    resources:
+#      static-locations: file:/static/
+
+logging:
+  level:
+    root: info

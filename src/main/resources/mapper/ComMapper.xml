@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.cad.mapper.ComDao">
+    <resultMap id="com" type="com.bupt.cad.entity.Com">
+        <result property="comId" column="comId"/>
+        <result property="name" column="name"/>
+        <result property="screenId" column="screenId"/>
+        <result property="dataSourceId" column="dataSourceId"/>
+        <result property="config" column="config" typeHandler="com.bupt.cad.utils.JsonTypeHandler"/>
+        <result property="createTimestamp" column="createTimestamp" />
+        <result property="updateTimestamp" column="updateTimestamp" />
+    </resultMap>
+    <select id="getTotalNum" resultType="int">
+        select count(*) from Com;
+    </select>
+    <select id="getAllComById" parameterType="int" resultType="List">
+        select * from Com where screenId = #{screenId}
+    </select>
+    <select id="getCom" parameterType="int" resultMap="com">
+        select * from Com where comId=#{comId}
+    </select>
+    <insert id="addCom" parameterType="com.bupt.cad.entity.Com" useGeneratedKeys="true" keyProperty="comId">
+        insert Com(
+        name,
+        screenId,
+        dataSourceId,
+        config
+        )
+        values(
+        #{name},
+        #{screenId},
+        #{dataSourceId},
+        #{config,typeHandler=com.bupt.cad.utils.JsonTypeHandler}
+        )
+    </insert>
+    <insert id="insertComs" parameterType="List" useGeneratedKeys="true" keyProperty="comId">
+        insert into Com(name,screenId,dataSourceId,config)
+        values
+        <foreach collection="list" item="bean" index="index" separator="," >
+            (
+            #{bean.name},#{bean.screenId},#{bean.dataSourceId},
+            #{bean.config,typeHandler=com.bupt.cad.utils.JsonTypeHandler}
+            )
+        </foreach>
+    </insert>
+    <delete id="deleteAll" parameterType="int">
+        delete from Com where screenId=#{screenId}
+    </delete>
+    <!--填写映射-->
+</mapper>

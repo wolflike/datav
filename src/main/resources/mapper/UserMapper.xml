@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.cad.mapper.UserDao">
+    <insert id="insertUser" parameterType="com.bupt.cad.entity.User" useGeneratedKeys="true" keyProperty="userId">
+        insert User(name,password) values(#{name},#{password});
+    </insert>
+    <select id="getAllUser" resultType="com.bupt.cad.entity.User">
+        select * from User;
+    </select>
+    <select id="findUserById" parameterType="int" resultType="com.bupt.cad.entity.User">
+        select * from User where userId=#{userId};
+    </select>
+    <select id="getAllUserNum" resultType="int">
+        select count(*) from User;
+    </select>
+    <!--填写映射-->
+</mapper>
